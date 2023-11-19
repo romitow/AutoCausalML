@@ -1,0 +1,23 @@
+name: Black
+
+on: [push]
+
+jobs:
+  black:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: psf/black@stable
+        id: runBlack
+        with:
+          options: "--check --verbose --diff"
+          src: "."
+          version: "~= 23.0"
+      - name: Explain what to do if black failed
+        if: failure() && steps.runBlack.outcome == 'failure'
+        uses: mscoutermarsh/cowsays-action@master
+        with:
+          text: |
+            Oops! It seems like Black failed. You should try
+            installing black and running it! More on that
+            here: https://github.com/psf/black
